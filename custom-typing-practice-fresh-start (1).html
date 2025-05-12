@@ -1,0 +1,99 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Custom Typing Practice</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      margin: 20px;
+    }
+    textarea {
+      width: 90%;
+      font-size: 1.2em;
+      padding: 10px;
+      margin-bottom: 10px;
+    }
+    .keyboard-row {
+      display: flex;
+      justify-content: center;
+      margin: 5px 0;
+    }
+    .key {
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      padding: 12px 18px;
+      margin: 2px;
+      font-size: 1.2rem;
+      min-width: 40px;
+      text-align: center;
+    }
+    .highlight {
+      outline: 3px solid #000;
+      box-shadow: 0 0 10px 4px #ffd700;
+    }
+  </style>
+</head>
+<body>
+  <h1>Custom Typing Practice</h1>
+  <textarea id="customText" placeholder="Type your text here..."></textarea><br>
+  <button onclick="startTyping()">Start Typing</button>
+  <div id="typingSection" style="display:none;">
+    <h3>Type this:</h3>
+    <textarea id="inputArea" oninput="checkInput()"></textarea>
+  </div>
+  <h3>On-Screen Keyboard</h3>
+  <div id="keyboard"></div>
+
+  <script>
+    const layout = [
+      ['`', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', 'Delete'],
+      ['Tab', 'Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P', '[', ']', '\\'],
+      ['Caps', 'A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', ';', ''', 'Return'],
+      ['Shift', 'Z', 'X', 'C', 'V', 'B', 'N', 'M', ',', '.', '/', 'Shift'],
+      ['Space']
+    ];
+
+    function buildKeyboard() {
+      const container = document.getElementById("keyboard");
+      layout.forEach(row => {
+        const rowDiv = document.createElement("div");
+        rowDiv.className = "keyboard-row";
+        row.forEach(key => {
+          const keyDiv = document.createElement("div");
+          keyDiv.className = "key";
+          keyDiv.textContent = key;
+          keyDiv.dataset.key = key.toUpperCase();
+          rowDiv.appendChild(keyDiv);
+        });
+        container.appendChild(rowDiv);
+      });
+    }
+
+    let targetText = "";
+    function startTyping() {
+      targetText = document.getElementById("customText").value;
+      document.getElementById("typingSection").style.display = "block";
+      document.getElementById("inputArea").value = "";
+    }
+
+    function checkInput() {
+      const input = document.getElementById("inputArea").value;
+      highlightKey(targetText[input.length] || "");
+    }
+
+    function highlightKey(char) {
+      document.querySelectorAll(".key").forEach(k => {
+        k.classList.remove("highlight");
+        if (k.dataset.key === char.toUpperCase()) {
+          k.classList.add("highlight");
+        }
+      });
+    }
+
+    window.onload = buildKeyboard;
+  </script>
+</body>
+</html>
